@@ -1,15 +1,19 @@
-// lib/main.dart - Temporary test version
+// lib/main.dart - Production version
 import 'package:flutter/material.dart';
-// import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-// import 'firebase_options.dart';
-import 'test_firebase.dart'; // Remove this after testing
+import 'package:my_therapist/app/bindings/initial_bindings.dart';
+import 'firebase_options.dart';
+import 'app/routes/app_pages.dart';
+import 'app/routes/app_routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Test Firebase connection
-  await testFirebaseConnection();
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(MyApp());
 }
@@ -24,59 +28,45 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
-      ),
-      home: TestHomePage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class TestHomePage extends StatelessWidget {
-  const TestHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('AI Therapist Chat - Firebase Test'),
-        backgroundColor: Colors.blue.shade100,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.psychology,
-              size: 80,
-              color: Colors.blue,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: true,
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          iconTheme: IconThemeData(color: Colors.black),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            SizedBox(height: 20),
-            Text(
-              'AI Therapist Chat',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.blue,
+            side: BorderSide(color: Colors.blue),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
-            SizedBox(height: 10),
-            Text(
-              'Firebase connection test completed!',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.green,
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Check the console for Firebase test results',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
+      darkTheme: ThemeData.dark().copyWith(
+        primaryColor: Colors.blue,
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
+      initialRoute: Routes.LOGIN,
+      getPages: AppPages.pages,
+      initialBinding: InitialBinding(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
