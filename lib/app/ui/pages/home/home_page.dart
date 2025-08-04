@@ -107,7 +107,7 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 16),
 
             // Start Chat Button
-            Container(
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () => Get.toNamed(Routes.CHAT),

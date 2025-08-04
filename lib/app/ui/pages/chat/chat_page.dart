@@ -164,13 +164,15 @@ class ChatPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 12),
-                Obx(() => FloatingActionButton(
-                      onPressed: ChatController.instance.isAiResponding
-                          ? null
-                          : () => _sendMessage(),
-                      mini: true,
-                      child: Icon(Icons.send),
-                    )),
+                Obx(
+                  () => FloatingActionButton(
+                    onPressed: ChatController.instance.isAiResponding
+                        ? null
+                        : () => _sendMessage(),
+                    mini: true,
+                    child: Icon(Icons.send),
+                  ),
+                ),
               ],
             ),
           ),

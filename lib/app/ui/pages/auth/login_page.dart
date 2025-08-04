@@ -76,7 +76,7 @@ class LoginPage extends StatelessWidget {
                 // Password Field
                 Obx(
                   () => TextFormField(
-                    controller: _passwordController, // No .value needed
+                    controller: _passwordController,
                     obscureText: !_isPasswordVisible.value,
                     decoration: InputDecoration(
                       labelText: 'Password',

@@ -1,32 +1,27 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can only access their own data
+    
+    // Users can only read/update their own user document.
+    // Anyone can create a user document during sign-up.
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read, update: if request.auth.uid == userId;
+      allow create: if request.auth.uid != null;
     }
-    
-    // Chat messages - users can only access their own messages
-    match /chats/{chatId} {
-      allow read, write: if request.auth != null && 
-        request.auth.uid == resource.data.userId;
-    }
-    
-    // Therapy sessions
+
+    // A user can read/write sessions that belong to them.
     match /therapy_sessions/{sessionId} {
-      allow read, write: if request.auth != null && 
-        request.auth.uid == resource.data.userId;
+      allow read, write: if request.auth.uid == resource.data.userId;
     }
-    
-    // Crisis alerts - restricted access
-    match /crisis_alerts/{alertId} {
-      allow read, write: if request.auth != null && 
-        request.auth.uid == resource.data.userId;
-    }
-    
-    // Test collection (for our Firebase connection test)
-    match /test/{document} {
-      allow read, write: if true; // Open for testing - we'll remove this later
+
+    // A user can read messages that belong to them and create new ones.
+    // The query in the app MUST filter by userId for this to work.
+    match /messages/{messageId} {
+      allow read: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+      // Disallow updates/deletes for message history integrity.
+      allow update, delete: if false;
     }
   }
 }
